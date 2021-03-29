@@ -7,7 +7,7 @@ public class Cartas {
     MapFactory mapfacto = new MapFactory();
 
     Map<String, String> mapUsuario;
-    Map<String, String> mapGeneral;
+    //Map<String, String> mapGeneral;
     boolean hashmap = false;
     boolean treemap = false;
     boolean linkedhmap = false;
@@ -45,7 +45,7 @@ public class Cartas {
         }
 
         mapUsuario = mapfacto.getMap(respuesta);
-        mapGeneral = mapfacto.getMap(respuesta);
+        //mapGeneral = mapfacto.getMap(respuesta);
         
 
 
