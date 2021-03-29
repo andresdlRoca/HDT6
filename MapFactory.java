@@ -11,13 +11,22 @@ public class MapFactory {
 
             switch (entry) {
             //regresa un Hashmap
-            case 1 : return new HashMap<String, String>();
+            case 1 : 
+              System.out.println("HashMap");
+              return new HashMap<String, String>();
+              
             //regresa una treeMap
-            case 2 : return new TreeMap<String,String>();
-            //regresa un LinkedHashMap
-            case 3 : return new LinkedHashMap<String,String>();
-            //regresa Vector
-            default : new StackVector<E>();
-        };
+            case 2 : System.out.println("TreeMap");
+              return new TreeMap<String,String>();
+              
+            case 3 : 
+              System.out.println("LinkedHashMap");
+              return new LinkedHashMap<String,String>();
+              
+            default :  
+              System.out.println("Default, Hashmap");
+              return new HashMap<String, String>();
+              
+        }
     }
 }
