@@ -1,51 +1,77 @@
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Cartas {
 
-  MapFactory mapfacto = new MapFactory();
+    MapFactory mapfacto = new MapFactory();
 
-  Map<String, String> mapUsuario;
-  Map<String, String> mapGeneral;
-  boolean hashmap = false;
-  boolean treemap = false;
-  boolean linkedhmap = false;
+    Map<String, String> mapUsuario;
+    Map<String, String> mapGeneral;
+    boolean hashmap = false;
+    boolean treemap = false;
+    boolean linkedhmap = false;
 
-  public void setImplementacion(int respuesta){
-    mapUsuario = mapfacto.getMap(respuesta);
-    mapGeneral = mapfacto.getMap(respuesta);
-    mapGeneral.put("CartaPrueba", "Mago");
-    mapGeneral.put("CartaPrueba 2", "Mago");
-    mapGeneral.put("CartaPrueba 3", "Mago");
-    mapGeneral.put("El Bicho", "Futbolista");
-    mapGeneral.put("Messi", "Futbolista");
-    mapGeneral.put("Haaland", "Futbolista");
-    mapGeneral.put("Dragon", "Monstruo");
-    mapGeneral.put("Ogro", "Monstruo");
-    mapGeneral.put("Esqueleto", "Monstruo");
-    mapGeneral.put("No se", "Arquero");
-    if(respuesta == 1 || respuesta > 3) {
-      hashmap = true;
-    } else if (respuesta == 2) {
-      treemap = true;
-    } else if (respuesta == 3) {
-      linkedhmap = true;
+    MapFactory factory = new MapFactory();
+    Map<String, String> cards;
+
+
+    public void setImplementacion(int respuesta){
+        try {
+            File myObj = new File("cards_desc.txt");
+            Scanner linea = new Scanner(myObj);
+
+            cards = factory.getMap(respuesta);
+
+
+            //complejidad del Hashmap
+            int i=0;
+
+            while (linea.hasNextLine()&&i<10000) {
+                String data = linea.nextLine();
+                String nombre = data.split("\\|")[0];
+                String tipo = data.split("\\|")[1];
+
+                cards.put(nombre, tipo);
+                i++;
+            }
+
+            System.out.println(cards);
+
+            linea.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
+        mapUsuario = mapfacto.getMap(respuesta);
+        mapGeneral = mapfacto.getMap(respuesta);
+        
+
+
+        if(respuesta == 1 || respuesta > 3) {
+            hashmap = true;
+        } else if (respuesta == 2) {
+            treemap = true;
+        } else if (respuesta == 3) {
+            linkedhmap = true;
+        }
     }
-  }
 
-  //Se chequea si la carta existe y luego se agrega al Map del usuario.
-  public void agregarCarta(String carta) {
-    if(mapGeneral.containsKey(carta)) {
-      mapUsuario.put(carta, mapGeneral.get(carta));
-      System.out.println("La carta se ha agregado a tu coleccion.");
-    } else {
-      System.out.println("Esta carta no existe.");
+    //Se chequea si la carta existe y luego se agrega al Map del usuario.
+    public void agregarCarta(String carta) {
+        if(cards.containsKey(carta)) {
+            mapUsuario.put(carta, cards.get(carta));
+            System.out.println("La carta se ha agregado a tu coleccion.");
+        } else {
+            System.out.println("Esta carta no existe.");
+        }
     }
-  }
 
   //Se chequea si la carta existe y luego se muestra el tipo que tiene asignado.
   public void mostrarTipo(String carta) {
-    if(mapGeneral.containsKey(carta)) {
-      System.out.println("Esta carta es de tipo " + mapGeneral.get(carta));
+    if(cards.containsKey(carta)) {
+      System.out.println("Esta carta es de tipo " + cards.get(carta));
     } else {
       System.out.println("Esta carta no existe.");
     }
@@ -58,16 +84,15 @@ public class Cartas {
       System.out.println(entry.getKey() + " / " + entry.getValue());
     }
 
-    int countMago = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Mago");
+    int countTrampa = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Trampa");
     int countMonstruo = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Monstruo");
-    int countFutbolista = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Futbolista");
-    int countArquero = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Arquero");
+    int countHechizo = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Hechizo");
 
     System.out.println("---Cantidad de cartas---");
-    System.out.println("Mago: " + countMago);
+    System.out.println("Trampa: " + countTrampa);
     System.out.println("Monstruo: " + countMonstruo);
-    System.out.println("Fubolista: " + countFutbolista);
-    System.out.println("Arquero: " + countArquero);
+    System.out.println("Hechizo " + countHechizo);
+    
   }
 
   //Muestra el nombre, tipo y cantidad de cada carta que el usuario tiene en su coleccion, ordenadas por tipo.
@@ -102,22 +127,20 @@ public class Cartas {
         }
     }
 
-    int countMago = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Mago");
+    int countTrampa = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Trampa");
     int countMonstruo = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Monstruo");
-    int countFutbolista = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Futbolista");
-    int countArquero = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Arquero");
+    int countHechizo = Collections.frequency(new ArrayList<String>(mapUsuario.values()), "Hechizo");
 
     System.out.println("---Cantidad de cartas---");
-    System.out.println("Mago: " + countMago);
+    System.out.println("Trampa: " + countTrampa);
     System.out.println("Monstruo: " + countMonstruo);
-    System.out.println("Fubolista: " + countFutbolista);
-    System.out.println("Arquero: " + countArquero);
+    System.out.println("Hechizo " + countHechizo);
   }
   
 
   //Mostrar el nombre y tipo de todas las cartas existentes.
   public void mostrarCartasGeneral() {
-        for(Map.Entry<String,String> entry : mapGeneral.entrySet()) {
+        for(Map.Entry<String,String> entry : cards.entrySet()) {
       System.out.println(entry.getKey() + " / " + entry.getValue());
     }
   }
@@ -125,7 +148,7 @@ public class Cartas {
   //Mostrar el nombre y tipo de todas las cartas existentes, ordenadas por tipo.
   public void mostrarCartasGeneralOrd() {
       if(hashmap) {
-        Map<String, String> sortedMap = sortByValues(mapGeneral);
+        Map<String, String> sortedMap = sortByValues(cards);
         Set set2 = sortedMap.entrySet();
         Iterator iterator2 = set2.iterator();
         while(iterator2.hasNext()) {
@@ -135,7 +158,7 @@ public class Cartas {
         }
 
     } else if (treemap) {
-      Map SortedMap = sortByValues(mapGeneral);
+      Map SortedMap = sortByValues(cards);
       Set set = SortedMap.entrySet();
       Iterator i = set.iterator();
       while(i.hasNext()) {
@@ -143,7 +166,7 @@ public class Cartas {
         System.out.println(me.getKey() + " / " + me.getValue());
       }
     } else if (linkedhmap) {
-        Map<String, String> sortedMap = sortByValues(mapGeneral);
+        Map<String, String> sortedMap = sortByValues(cards);
         Set set2 = sortedMap.entrySet();
         Iterator iterator2 = set2.iterator();
         while(iterator2.hasNext()) {
